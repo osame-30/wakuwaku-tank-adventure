@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#eef0dc" />
+    <meta name="description" content="撃ったら、世界が動き出す。小さなタンクと、発見いっぱいの草原へ。" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='5' y='30' width='54' height='26' rx='12' fill='%232d6153'/%3E%3Crect x='14' y='19' width='36' height='27' rx='9' fill='%23efb94b'/%3E%3Crect x='27' y='4' width='10' height='30' rx='4' fill='%23edeee0'/%3E%3C/svg%3E" />
+    <title>わくわくタンクアドベンチャー</title>
+    <script type="module" crossorigin src="./assets/index-D81slHvh.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CbkPnC95.css">
+  </head>
+  <body>
+    <aside class="desktop-note left-note" aria-label="ゲームについて">
+      <a class="wordmark" href="./"><span class="brand-mark">w.</span> WAKUWAKU<br /><span>TANK ADVENTURE</span></a>
+      <div class="intro-copy"><span class="eyebrow">A LITTLE TANK, A BIG ADVENTURE.</span><h1>ちいさな一発、<br />おおきな<br /><em>わくわく。</em></h1><p>撃ったら、世界が動き出す。<br />どこへ行こう。なにが起こるだろう。</p><div class="tiny-trail"><span></span><span></span><span></span> ✳</div></div>
+      <span class="edition">PLAYFUL WORLD / PROTOTYPE 0.3</span>
+    </aside>
+    <main id="game" aria-label="わくわくタンクアドベンチャー">
+      <canvas id="world" tabindex="0" inert aria-label="草原の冒険。クリックで砲撃、長押しで波動砲。矢印キーで左右移動、スペースで砲撃。"></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+      <header class="hud" inert>
+        <button id="auto" class="auto-button" aria-label="自動前進" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="m8 5 10 7-10 7Z"/></svg><span>AUTO</span><i></i></button>
+        <div class="hud-actions"><button id="rebuild" class="icon-button" hidden aria-label="近くの積み木をもう一度"><svg viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1 8M4 4v6h6"/></svg></button><button id="sound" class="icon-button" aria-label="音を消す" aria-pressed="true"><svg viewBox="0 0 24 24"><path d="m11 4-5 5H3v6h3l5 5Z"/><path class="sound-waves" d="M15 8q5 4 0 8m3-11q8 7 0 14"/></svg></button><button id="pause" class="icon-button" aria-label="一時停止"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button></div>
+      </header>
+      <div id="location" class="location"><span id="location-number">01</span><div><span id="location-name">はじまりの草原</span><small id="location-english">THE MEADOW</small></div><svg viewBox="0 0 32 32"><path d="m3 25 9-17 6 10 4-7 8 14Z"/><path d="m9 14 3 3 3-3"/></svg></div>
+      <div id="journey" class="journey" role="progressbar" aria-label="おやままでの道" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div><i id="journey-fill"></i></div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V3m0 0c5-4 9 4 14 0v10c-5 4-9-4-14 0"/></svg></div>
+      <div class="speed-wind" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div id="charge" class="charge" hidden><svg viewBox="0 0 24 24"><path d="m13 2-9 12h7l-1 8 10-12h-8Z"/></svg><div><i id="charge-fill"></i></div><span id="charge-star">✧</span></div>
+      <div id="reticle" class="reticle" aria-hidden="true"></div>
+      <div id="reaction" class="reaction" aria-live="polite"></div>
+      <div id="move-zone" class="move-zone" aria-label="左右移動エリア"><div class="move-hint"><svg viewBox="0 0 24 24"><path d="m14 6-6 6 6 6"/></svg><div class="steering-icon"><span></span></div><svg viewBox="0 0 24 24"><path d="m10 6 6 6-6 6"/></svg></div><span class="move-label">すいすい、どこへでも。</span></div>
+      <div id="joystick" class="joystick" hidden><i id="stick"></i></div>
+      <section id="start-screen" class="start-screen stage-select" aria-labelledby="stage-heading">
+        <header class="select-header"><p class="select-brand">わくわくタンク <span>アドベンチャー</span></p><span class="select-eyebrow">LET'S TAKE A LITTLE TRIP</span><h2 id="stage-heading">きょうは、どこまで？</h2></header>
+        <div class="stage-options">
+          <button id="start" class="stage-card" data-stage="meadow" disabled aria-label="いつもの草原、180メートルをあそぶ">
+            <span class="stage-art meadow-art">
+              <svg viewBox="0 0 340 130" aria-hidden="true">
+                <path fill="#bed19a" d="M0 85Q60 30 140 77T340 58V130H0Z"/><path fill="#a3bd88" d="M210 72 260 14 310 72Z"/><path fill="#e7e8c8" d="m244 33 16-19 16 19-10-3-6 7-6-7Z"/>
+                <path d="M38 146C30 72 140 116 181 81S229 61 261 69" fill="none" stroke="#fff3cd" stroke-width="19"/>
+                <g fill="#53836b" stroke="none"><path d="m74 61 16-37 17 37Z"/><path d="m114 50 12-28 13 28Z"/><path d="m291 111 15-34 16 34Z"/></g>
+                <g stroke="#886b43" stroke-width="4"><path d="M91 60v10m35-21v9m180 52v9"/></g>
+                <g transform="translate(174 83) rotate(-25)" stroke="none"><rect x="-17" y="-10" width="34" height="22" rx="7" fill="#355e50"/><rect x="-10" y="-13" width="22" height="22" rx="6" fill="#edb64a"/><rect x="4" y="-5" width="25" height="6" rx="2" fill="#fff5d5"/></g>
+                <path d="M261 69V43" stroke="#365b4d" stroke-width="3"/><path d="m263 43 19 6-19 7Z" fill="#ef865d" stroke="none"/>
+                <g fill="#fff6d9" stroke="none"><circle cx="48" cy="83" r="3"/><circle cx="135" cy="103" r="3"/><circle cx="238" cy="105" r="3"/></g>
+              </svg><span class="stage-stamp">01 / MEADOW</span>
+            </span>
+            <span class="stage-info"><span><strong>いつもの草原</strong><small>ちょこっと おさんぽ <b>180m</b></small></span><span class="stage-play" aria-hidden="true">▶</span></span>
+          </button>
+          <button id="start-long" class="stage-card long-card" data-stage="long" disabled aria-label="ながい冒険、いつもの5倍、900メートルをあそぶ">
+            <span class="stage-art long-art">
+              <svg viewBox="0 0 340 150" aria-hidden="true">
+                <circle cx="280" cy="35" r="22" fill="#f3c565" stroke="none"/><path d="M0 83Q60 47 140 83T340 74V150H0Z" fill="#b8c593"/>
+                <path d="m225 84 40-65 42 65Z" fill="#739680"/><path d="m267 89 37-62 36 62Z" fill="#547d6e"/><path d="m254 36 11-17 13 21-12-5Z" fill="#f3e6c4"/>
+                <path d="M30 157C15 113 158 144 140 107S29 89 71 66 213 118 220 82 257 64 270 77" fill="none" stroke="#fff0c9" stroke-width="13"/>
+                <g fill="#fff6dc" stroke="#bc9165" stroke-width="2"><circle cx="62" cy="130" r="6"/><circle cx="140" cy="108" r="6"/><circle cx="72" cy="67" r="6"/><circle cx="202" cy="94" r="6"/></g>
+                <g stroke="none"><rect x="177" y="46" width="12" height="15" rx="2" fill="#e98563"/><rect x="190" y="46" width="12" height="15" rx="2" fill="#ecba51"/><rect x="184" y="32" width="12" height="14" rx="2" fill="#77b6af"/><path d="m30 101 12-30 13 30Z" fill="#5e8c70"/><path d="m292 129 13-32 15 32Z" fill="#5e8c70"/><circle cx="100" cy="111" r="4" fill="#ef9d9a"/><circle cx="111" cy="117" r="4" fill="#ef9d9a"/></g>
+                <path d="M270 78V52" stroke="#365b4d" stroke-width="3"/><path d="m272 52 19 6-19 7Z" fill="#ef865d" stroke="none"/>
+              </svg><span class="stage-stamp">02 / LONG TRIP</span><span class="long-badge">5ばい！</span>
+            </span>
+            <span class="stage-info"><span><strong>ながい冒険</strong><small>ずーっと とおくのおやまへ <b>900m</b></small></span><span class="stage-play" aria-hidden="true">▶</span></span>
+          </button>
+        </div>
+        <p id="select-status" class="select-caption" role="status">じゅんびちゅう…</p>
+      </section>
+      <dialog id="settings"><div class="pause-symbol">Ⅱ</div><h2>ひとやすみ</h2><p>冒険は、いつでも待っているよ。</p><label class="setting">スピード演出・画面のゆれ<input id="shake" type="checkbox" checked /></label><button id="resume" class="primary-button">つづける <span>→</span></button><button id="restart" class="text-button">このコースを はじめから</button><button id="choose-stage" class="text-button">コースをえらぶ</button></dialog>
+      <div id="finish-screen" class="finish-screen" hidden><div class="finish-title" role="status"><span aria-hidden="true">⚑</span><h2 id="finish-message">おやまに、とうちゃく！</h2></div><button id="play-again" class="start-button"><span aria-hidden="true">↻</span> もういっかい</button><button id="finish-select" class="text-button">コースをえらぶ <span aria-hidden="true">→</span></button></div>
+      <div id="error" class="error" hidden role="alert"><h2>画面を準備できませんでした</h2><p>WebGL対応のブラウザーで、もう一度開いてください。</p><button onclick="location.reload()">もう一度ためす</button></div>
+    </main>
+    <aside class="desktop-note right-note" aria-label="操作方法"><div class="field-note"><span class="eyebrow">FIELD NOTES — 01</span><h2>世界に、<br />ちょっかいを。</h2><p>こわせる岩。おどるロボット。<br />いつもの景色に、<br />ふしぎが隠れている。</p></div><ol class="controls"><li><span class="control-icon">↖</span><div>タップで、ぽんっ。<small>CLICK TO SHOOT</small></div></li><li><span class="control-icon">◎</span><div>ためて、どーん！<small>HOLD & RELEASE</small></div></li><li><span class="control-icon">»</span><div>はねぐつで、びゅん。<small>FIND A LITTLE BOOST</small></div></li></ol><p class="keyboard-note">PCでは <kbd>←</kbd> <kbd>→</kbd> で移動<br /><kbd>SPACE</kbd> でも撃てるよ</p><span class="edition">NO SCORE. JUST WONDER.</span></aside>
+  </body>
+</html>
